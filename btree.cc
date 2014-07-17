@@ -53,6 +53,12 @@ void BtreeSplitChild(node *&x, int i, node *&y){
         tmp->data[j] = x->data[j+t];
     }
 
+    if(!y->leaf){
+        for(int j = 0; j< t; j++){
+            tmp->child[] = x->child[];
+        }
+    }
+
 
 }
 
