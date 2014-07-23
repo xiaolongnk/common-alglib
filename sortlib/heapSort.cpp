@@ -14,6 +14,7 @@ using namespace std;
 
 void heapfy(int*,int,int);
 
+// size is last element idx of the array;
 void heapSort(int *p,int size)
 {
 	for(int i=size/2; i>=0; i--)
@@ -28,42 +29,29 @@ void heapSort(int *p,int size)
 }
 
 // create a max-heap first element is max element;
-void heapfy(int *p, int pos,int size)
-{
-	int l = LEFT(pos);
-	int r = l+1;
-	if( l <= size)
-	{
-		if(r <=size )
-		{
-			if(p[l] < p[r])
-			{
-				if(p[pos] < p[r])
-				{
-					swap(p[r],p[pos]);
-					heapfy(p,r,size);
-				}
-			}
-			else 
-			{
-				if(p[pos] < p[l])
-				{
-					swap(p[l],p[pos]);
-					heapfy(p,l,size);
-				}
-			}
-		}
-		else	// r == size+1; l == size;
-		{
-			if(p[pos] < p[l])
-			{
-				swap(p[pos],p[l]);
-			}
-		}
-	}
+// size is idx of last element.
+
+void heapfy(int *p, int pos, int size){
+    int left = LEFT(pos);
+    int right = left + 1;
+    if(left == size){
+        if(p[pos] < p[left]) swap(p[pos],p[left]);
+        return;
+    }
+    if(right <= size){
+        if(p[left] < p[right]){
+            if( p[pos] < p[right] ){
+                swap(p[pos],p[right]);
+                heapfy(p,right,size);
+            }
+        }else if(p[left] > p[right]){
+            if( p[pos] < p[left]){
+                swap(p[pos],p[left]);
+                heapfy(p,left,size);
+            }
+        }
+    }
 }
-
-
 
 int main()
 {
