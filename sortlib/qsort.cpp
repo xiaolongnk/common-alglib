@@ -5,6 +5,7 @@
 using namespace std;
 int process(int *,int, int);
 
+// left and right is idx of the array;
 void qsort(int *p, int left, int right)
 {
 	if( left < right)
@@ -17,20 +18,18 @@ void qsort(int *p, int left, int right)
 
 int process(int *p, int left, int right)
 {
-	int temp = left-1;
+	int temp = left;
 	int key = p[right];
-	
 	for(int i=left; i<right; i++)
 	{
 		if(p[i]<key)
 		{
-			swap(p[++temp],p[i]);
+			swap(p[temp++],p[i]);
 		}
 	}
-	swap(p[temp+1],p[right]);
-	return temp+1;
+	swap(p[temp],p[right]);
+	return temp;
 }
-
 
 int main()
 {
