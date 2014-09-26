@@ -16,8 +16,8 @@ typedef int elem;
 struct node {
     elem data[T + T - 1];
     node *child[T+T];
-    int cnt;
-    bool leaf;
+    int cnt;   // number of keys, max value is 2*T-1
+    bool leaf; // whether it is a leaf node
     node(){
         for(int i=0; i<T; i++){
             data[i] = 0;
@@ -42,8 +42,42 @@ status BtreeAlloc(node* &root){
 // insert key in the tree;
 status Insert(int key, node* &root){
     status ret = FAILED;
-
+    node * cpy = root;
+    if(cpy->cnt == 2*t-1) {
+        node * tmp = new node();
+        tmp->leaf = false;
+        tmp->cnt = 0;
+        tmp->child[0] =cpy;
+        root = tmp;
+        BtreeSplitChild(root,0,cpy);
+        BtreeInsertNotFull(cpy,key);
+    } else {
+        BtreeInsertNotFull(cpy,key);
+    }
     return ret;
+}
+
+
+
+status BtreeInsertNotFull(node * x, int key)
+{
+    int cnt = x->cnt;
+    if(x->leaf){
+        while(cnt >=0 && key < x->data[cnt-1])
+        {
+            x->data[cnt] = x->data[cnt-1];
+            cnt--;
+        }
+        x->data[cnt] = key;
+        x->cnt++;
+    }else {
+        while(cnt>=0 && key < x->data[cnt-1]) cnt--;
+        if(x->child[cnt]->cnt == 2*T-1){
+            BtreeSplitChild(x,cnt,x->child[cnt]);
+            if(key > x->data[cnt]) cnt++;
+        }
+        BtreeInsertNotFull(x->child[cnt],key);
+    }
 }
 
 int bsearch(int key, int *a, int len){
@@ -61,6 +95,7 @@ int bsearch(int key, int *a, int len){
     return ll;
 }
 
+// 将x 节点的第 i 个孩子节点 y 将被分裂两个节点
 void BtreeSplitChild(node *&x, int i, node *&y){
     node *tmp = new node();
     tmp->leaf = y->leaf;
