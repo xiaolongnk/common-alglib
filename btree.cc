@@ -35,6 +35,10 @@ struct node {
 
 void BtreeSplitChild(node *&, int , node *&);
 status BtreeInsertNotFull(node *x, int i);
+void dropFromLeaf(node *&, int);
+void combineTwoNode(node *&root, int pl);
+node * successor(node *);
+node * precessor(node *);
 
 status BtreeAlloc(node* &root){
     status ret = OK;
@@ -123,29 +127,106 @@ void BtreeSplitChild(node *&x, int i, node *&y){
     x->cnt++;
 }
 
-// delete key in tree;
-
-status Drop(int key, node* &root){
+// delete key in tree; 从以root为根的子树中删除关键字key.
+status Drop(node* &root, int key){
     status ret = FAILED;
     if(root){
         bool in_node = false;
+        node * child;
+        int pos = 0;
         for(int i=0; i< root->cnt; i++){
             if(root->data[i] == key){
                 in_node = true;
                 break;
             }
+            if(root->data[i] > key ){
+                pos = i + 1;
+                child = root->child[pos];
+                break;
+            }
         }
         if(in_node) {
             if(root->leaf){
-
+                // 如果是叶子节点，直接从这个叶子节点删除
+                dropFromLeaf(root,key);
             }else {
-
+                // 如果不是叶子节点，需要做一些处理
             }
         }else {
+            // here must have a child node. do something on this node.
+            if(child->cnt == T-1){
+                // 看左边的兄弟节点
+                if(pos - 1 > 0 && root->child[pos-1]->cnt > T-1){
 
+                }else if(pos + 1 < child->cnt && root->child[pos+1]->cnt > T-1){
+                //可以和右边的兄弟节点
+                
+                }else {
+                // 需要合并两个孩子
+                    combineTwoNode(root,pos);
+                    Drop(root,key);
+                }
+
+            }else {
+                Drop(child, key);
+            }
         }
     }
     return ret;
+}
+
+// 从叶节点删除一个关键字
+void dropFromLeaf(node *& root, int key)
+{
+    int len = root->cnt;
+    int pos = 0;
+    for(int i=0 ; i<root->cnt; i++){
+        if(key == root->data[i]){
+            for(int j = i; j < root->cnt-1; j++){
+                root->data[j] = root->data[j+1];
+            }
+            root->cnt--;
+            break;
+        }
+    }
+}
+
+void combineTwoNode(node *&root, int p_key)
+{
+    node * left = root->child[p_key];
+    node * right = root->child[p_key+1];
+
+    left->data[T-1] = root->data[p_key];
+
+    for(int i=0; i<right->cnt; i++){
+        left->data[T+i] = right->data[i];
+        left->child[T+i+1] = right->child[i];
+    }
+    left->child[T+T] = right->child[T];
+    delete right;
+    
+    for(int i=p_key; i< root->cnt - 1; i++){
+        root->data[i] = root->data[i+1];
+        if(i+2<=2*T) {
+            root->child[i+1] = root->child[i+2];
+        }
+    }
+    root->cnt--;
+}
+
+// 前驱节点 
+node * precessor(node * root)
+{
+    node * tmp;
+
+    return tmp;
+}
+// 后继节点
+node * successor(node * root)
+{
+    node * tmp;
+
+    return tmp;
 }
 
 // print tree
