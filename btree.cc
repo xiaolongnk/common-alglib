@@ -11,7 +11,9 @@ const int T = 3;
 const int maxc = T + T;
 const int maxd = T + T - 1;
 
+enum  status { OK,FAILED,REPEAT };
 typedef int elem;
+
 
 struct node {
     elem data[T + T - 1];
@@ -29,8 +31,10 @@ struct node {
     }
 };
 
-enum  status { OK,FAILED,REPEAT };
 //create btree
+
+void BtreeSplitChild(node *&, int , node *&);
+status BtreeInsertNotFull(node *x, int i);
 
 status BtreeAlloc(node* &root){
     status ret = OK;
@@ -43,20 +47,19 @@ status BtreeAlloc(node* &root){
 status Insert(int key, node* &root){
     status ret = FAILED;
     node * cpy = root;
-    if(cpy->cnt == 2*t-1) {
+    if(cpy->cnt == 2*T-1) {
         node * tmp = new node();
         tmp->leaf = false;
         tmp->cnt = 0;
         tmp->child[0] =cpy;
         root = tmp;
         BtreeSplitChild(root,0,cpy);
-        BtreeInsertNotFull(cpy,key);
+        BtreeInsertNotFull(root,key);
     } else {
         BtreeInsertNotFull(cpy,key);
     }
     return ret;
 }
-
 
 
 status BtreeInsertNotFull(node * x, int key)
@@ -116,18 +119,47 @@ void BtreeSplitChild(node *&x, int i, node *&y){
     for( int j = x->cnt; j>i; j--){
         x->data[j] = x->data[j-1];
     }
-    x->data[i] = y->data[T];
+    x->data[i] = y->data[T-1];
+    x->cnt++;
 }
 
 // delete key in tree;
 
 status Drop(int key, node* &root){
     status ret = FAILED;
+    if(root){
+        bool in_node = false;
+        for(int i=0; i< root->cnt; i++){
+            if(root->data[i] == key){
+                in_node = true;
+                break;
+            }
+        }
+        if(in_node) {
+            if(root->leaf){
+
+            }else {
+
+            }
+        }else {
+
+        }
+    }
     return ret;
 }
 
 // print tree
-
+void treePrint(node * root, int width)
+{
+    if(root){
+        for(int i=0; i<root->cnt; i++){
+            treePrint(root->child[i],width + 5);
+            for(int j=0; j<width; j++) cout<<" ";
+            cout<<root->data[i]<<endl;
+        }
+        treePrint(root->child[root->cnt],width + 5);
+    }
+}
 // search key in tree
 
 //          
@@ -135,6 +167,9 @@ status Drop(int key, node* &root){
 int main(){
     node * root;
     BtreeAlloc(root);
-    printf("root->cnt %d\n",root->cnt);
+    for(int i=0; i<28; i++){
+        Insert(i,root);
+    }
+    treePrint(root,0);
     return 0;
 }
