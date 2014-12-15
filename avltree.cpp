@@ -10,7 +10,6 @@
 using namespace std;
 
 typedef short eletype;
-
 struct node
 {
 	eletype data;
