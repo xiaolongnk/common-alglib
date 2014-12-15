@@ -34,9 +34,11 @@ struct node {
 //create btree
 
 void BtreeSplitChild(node *&, int , node *&);
-status BtreeInsertNotFull(node *x, int i);
+void BtreeInsertNotFull(node *x, int i);
 void dropFromLeaf(node *&, int);
 void combineTwoNode(node *&root, int pl);
+void borrowFromLeft(node*&, int );
+void borrowFromRight(node*&, int );
 node * successor(node *);
 node * precessor(node *);
 
@@ -66,7 +68,7 @@ status Insert(int key, node* &root){
 }
 
 
-status BtreeInsertNotFull(node * x, int key)
+void BtreeInsertNotFull(node * x, int key)
 {
     int cnt = x->cnt;
     if(x->leaf){
@@ -156,11 +158,13 @@ status Drop(node* &root, int key){
             // here must have a child node. do something on this node.
             if(child->cnt == T-1){
                 // 看左边的兄弟节点
-                if(pos - 1 > 0 && root->child[pos-1]->cnt > T-1){
-
-                }else if(pos + 1 < child->cnt && root->child[pos+1]->cnt > T-1){
+                if(pos - 1 >= 0 && root->child[pos-1]->cnt > T-1){
+                    borrowFromLeft(root, pos - 1);
+                    Drop(child, key);
+                }else if(pos + 1 <= child->cnt && root->child[pos+1]->cnt > T-1){
                 //可以和右边的兄弟节点
-                
+                    borrowFromRight(root, pos + 1);
+                    Drop(child, key);
                 }else {
                 // 需要合并两个孩子
                     combineTwoNode(root,pos);
@@ -204,7 +208,7 @@ void combineTwoNode(node *&root, int p_key)
     }
     left->child[T+T] = right->child[T];
     delete right;
-    
+
     for(int i=p_key; i< root->cnt - 1; i++){
         root->data[i] = root->data[i+1];
         if(i+2<=2*T) {
@@ -214,19 +218,57 @@ void combineTwoNode(node *&root, int p_key)
     root->cnt--;
 }
 
-// 前驱节点 
+// 前驱节点 前驱节点中最大的 data 就是需要的值。
 node * precessor(node * root)
 {
-    node * tmp;
-
-    return tmp;
+    while(1){
+        if(NULL == root->child[root->cnt]){
+            break;   
+        }
+        root = root->child[root->cnt]
+    }
+    return root;
 }
-// 后继节点
+// 后继节点 后继节点中最小的 data 就是需要的值
 node * successor(node * root)
 {
-    node * tmp;
+    while(1){
+        if(NULL == root->child[0]){
+            break;
+        }
+        root = root->child[0];
+    }
+    return root;
+}
 
-    return tmp;
+void borrowFromLeft(node *&root, int pos)
+{
+    node * left = root->child[pos];
+    node * right = root->child[pos + 1];
+    for(int i = right->cnt ; i>0; i--){
+        right->data[i] = right->data[i-1];
+        right->child[i+1] = right->child[i];
+    }
+    right->child[1] = right->child[0];
+    right->data[0] = root->data[pos];
+    right->child[0] = left->child[left->cnt];
+    root->data[pos] = left->data[left->cnt-1];
+    left->cnt--;
+}
+
+void borrowFromRight(node *&root, int pos)
+{
+    node * left = root->child[pos];
+    node * right = root->child[pos + 1];
+    left->data[left->cnt] = root->data[pos];
+    left->child[left->cnt+1] = right->child[0];
+    root->data[pos] = right->data[0];
+    for(int i = 0; i<right->cnt-1; i++){
+        right->data[i] = right->data[i+1];
+        right->child[i] = right->child[i+1];
+    }
+    right->child[right->cnt-1] = right->child[right->cnt];
+    right->cnt --;
 }
 
 // print tree
@@ -243,8 +285,6 @@ void treePrint(node * root, int width)
 }
 // search key in tree
 
-//          
-
 int main(){
     node * root;
     BtreeAlloc(root);
@@ -254,3 +294,4 @@ int main(){
     treePrint(root,0);
     return 0;
 }
+
