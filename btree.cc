@@ -1,3 +1,8 @@
+/*
+ * @author: xiaolongou
+ * 2014-12-17 03:05
+ */
+
 #include <iostream>
 #include <stdio.h>
 #include <cstdlib>
@@ -213,7 +218,10 @@ void dropFromLeaf(node *& root, int key)
     }
 }
 
- 
+/*
+ * left = root->child[p_key]
+ * right = root->child[p_key + 1]
+ */ 
 void combineTwoNode(node *&root, int p_key)
 {
     node * left = root->child[p_key];
@@ -277,7 +285,10 @@ void borrowFromLeft(node *&root, int pos)
     root->data[pos] = left->data[left->cnt-1];
     left->cnt--;
 }
-
+/*
+ * left = root->child[pos]
+ * right = root->child[pos + 1]
+ */
 void borrowFromRight(node *&root, int pos)
 {
     cout<<"borrow from right"<<endl;
@@ -317,7 +328,6 @@ int main(){
         Insert(i,root);
     }
     treePrint(root,0);
-    cout<<"leafcount :"<<leafcount<<endl;
     int p;
     while(cin>>p){
         if(p == -1) break;
@@ -326,4 +336,3 @@ int main(){
     }
     return 0;
 }
-
