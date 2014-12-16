@@ -182,7 +182,7 @@ void deleteKey(node* &root, int key){
                     deleteKey(child, key);
                 }else if( pos + 1 <= root->cnt && root->child[pos+1]->cnt > T-1){
                 //可以和右边的兄弟节点
-                    borrowFromRight(root, pos + 1);
+                    borrowFromRight(root, pos);
                     deleteKey(child, key);
                 }else {
                 // 需要合并两个孩子
@@ -263,6 +263,7 @@ node * successor(node * root)
 
 void borrowFromLeft(node *&root, int pos)
 {
+    cout<<"borrow from left"<<endl;
     node * left = root->child[pos];
     node * right = root->child[pos + 1];
     for(int i = right->cnt ; i>0; i--){
@@ -271,6 +272,7 @@ void borrowFromLeft(node *&root, int pos)
     }
     right->child[1] = right->child[0];
     right->data[0] = root->data[pos];
+    right->cnt++;
     right->child[0] = left->child[left->cnt];
     root->data[pos] = left->data[left->cnt-1];
     left->cnt--;
@@ -278,6 +280,7 @@ void borrowFromLeft(node *&root, int pos)
 
 void borrowFromRight(node *&root, int pos)
 {
+    cout<<"borrow from right"<<endl;
     node * left = root->child[pos];
     node * right = root->child[pos + 1];
     left->data[left->cnt] = root->data[pos];
@@ -289,6 +292,7 @@ void borrowFromRight(node *&root, int pos)
     }
     right->child[right->cnt-1] = right->child[right->cnt];
     right->cnt --;
+    left->cnt++;
 }
 
 int leafcount = 0;
