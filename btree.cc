@@ -1,3 +1,8 @@
+/*
+ * @author: xiaolongou
+ * 2014-12-17 03:05
+ */
+
 #include <iostream>
 #include <stdio.h>
 #include <cstdlib>
@@ -32,14 +37,16 @@ struct node {
 };
 
 //create btree
-
+void treePrint(node *, int );
 void BtreeSplitChild(node *&, int , node *&);
-status BtreeInsertNotFull(node *x, int i);
+void BtreeInsertNotFull(node *&x, int i);
 void dropFromLeaf(node *&, int);
 void combineTwoNode(node *&root, int pl);
+void borrowFromLeft(node*&, int );
+void borrowFromRight(node*&, int );
+void deleteKey(node *&root, int key);
 node * successor(node *);
 node * precessor(node *);
-
 status BtreeAlloc(node* &root){
     status ret = OK;
     root = new node();
@@ -66,7 +73,7 @@ status Insert(int key, node* &root){
 }
 
 
-status BtreeInsertNotFull(node * x, int key)
+void BtreeInsertNotFull(node * &x, int key)
 {
     int cnt = x->cnt;
     if(x->leaf){
@@ -128,19 +135,23 @@ void BtreeSplitChild(node *&x, int i, node *&y){
 }
 
 // delete key in tree; 从以root为根的子树中删除关键字key.
-status Drop(node* &root, int key){
-    status ret = FAILED;
+void deleteKey(node* &root, int key){
     if(root){
+        cout<<"--------------------------"<<endl;
+        treePrint(root,0);
+        cout<<"--------------------------"<<endl;
         bool in_node = false;
-        node * child;
-        int pos = 0;
+        int pos = root->cnt - 1;
+        node * child = root->child[pos+1];
         for(int i=0; i< root->cnt; i++){
             if(root->data[i] == key){
                 in_node = true;
+                child = root->child[pos];
+                pos = i;
                 break;
             }
             if(root->data[i] > key ){
-                pos = i + 1;
+                pos = i;
                 child = root->child[pos];
                 break;
             }
@@ -151,33 +162,49 @@ status Drop(node* &root, int key){
                 dropFromLeaf(root,key);
             }else {
                 // 如果不是叶子节点，需要做一些处理
+                if(root->child[pos]->cnt > T - 1){
+                    node * pre = precessor(root->child[pos]);
+                    int pre_key = pre->data[pre->cnt-1];
+                    root->data[pos] = pre_key;
+                    deleteKey(root->child[pos], pre_key);
+                }else if(pos + 1 <=root->cnt && root->child[pos + 1]->cnt > T -1){
+                    node * succ = successor(root->child[pos + 1]);
+                    int suc_key = succ->data[0];
+                    root->data[pos] = suc_key;
+                    deleteKey(root->child[pos+1], suc_key); 
+                }else {
+                // 合并两个节点
+                    combineTwoNode(root, pos);
+                    deleteKey(root->child[pos],key);
+                }
             }
         }else {
             // here must have a child node. do something on this node.
             if(child->cnt == T-1){
                 // 看左边的兄弟节点
-                if(pos - 1 > 0 && root->child[pos-1]->cnt > T-1){
-
-                }else if(pos + 1 < child->cnt && root->child[pos+1]->cnt > T-1){
+                if(pos - 1 >=0 && root->child[pos-1]->cnt > T-1){
+                    borrowFromLeft(root, pos - 1);
+                    deleteKey(child, key);
+                }else if( pos + 1 <= root->cnt && root->child[pos+1]->cnt > T-1){
                 //可以和右边的兄弟节点
-                
+                    borrowFromRight(root, pos);
+                    deleteKey(child, key);
                 }else {
                 // 需要合并两个孩子
                     combineTwoNode(root,pos);
-                    Drop(root,key);
+                    deleteKey(root->child[pos],key);
                 }
-
             }else {
-                Drop(child, key);
+                deleteKey(child, key);
             }
         }
     }
-    return ret;
 }
 
 // 从叶节点删除一个关键字
 void dropFromLeaf(node *& root, int key)
 {
+    cout<<"here delete from leaf"<<endl;
     int len = root->cnt;
     int pos = 0;
     for(int i=0 ; i<root->cnt; i++){
@@ -191,6 +218,10 @@ void dropFromLeaf(node *& root, int key)
     }
 }
 
+/*
+ * left = root->child[p_key]
+ * right = root->child[p_key + 1]
+ */ 
 void combineTwoNode(node *&root, int p_key)
 {
     node * left = root->child[p_key];
@@ -200,35 +231,82 @@ void combineTwoNode(node *&root, int p_key)
 
     for(int i=0; i<right->cnt; i++){
         left->data[T+i] = right->data[i];
-        left->child[T+i+1] = right->child[i];
+        left->child[T+i] = right->child[i];
     }
     left->child[T+T] = right->child[T];
+    left->cnt = T+T-1;
+    left->leaf = right->leaf;
     delete right;
-    
-    for(int i=p_key; i< root->cnt - 1; i++){
+
+    for(int i=p_key; i < root->cnt - 1; i++){
         root->data[i] = root->data[i+1];
-        if(i+2<=2*T) {
-            root->child[i+1] = root->child[i+2];
-        }
+        if(i+2 <= root->cnt) root->child[i+1] = root->child[i+2];
     }
     root->cnt--;
+    cout<<"combine finished"<<endl;
 }
 
-// 前驱节点 
+// 前驱节点 前驱节点中最大的 data 就是需要的值。
 node * precessor(node * root)
 {
-    node * tmp;
-
-    return tmp;
+    while(1){
+        if(NULL == root->child[root->cnt]){
+            break;   
+        }
+        root = root->child[root->cnt];
+    }
+    return root;
 }
-// 后继节点
+// 后继节点 后继节点中最小的 data 就是需要的值
 node * successor(node * root)
 {
-    node * tmp;
-
-    return tmp;
+    while(1){
+        if(NULL == root->child[0]){
+            break;
+        }
+        root = root->child[0];
+    }
+    return root;
 }
 
+void borrowFromLeft(node *&root, int pos)
+{
+    cout<<"borrow from left"<<endl;
+    node * left = root->child[pos];
+    node * right = root->child[pos + 1];
+    for(int i = right->cnt ; i>0; i--){
+        right->data[i] = right->data[i-1];
+        right->child[i+1] = right->child[i];
+    }
+    right->child[1] = right->child[0];
+    right->data[0] = root->data[pos];
+    right->cnt++;
+    right->child[0] = left->child[left->cnt];
+    root->data[pos] = left->data[left->cnt-1];
+    left->cnt--;
+}
+/*
+ * left = root->child[pos]
+ * right = root->child[pos + 1]
+ */
+void borrowFromRight(node *&root, int pos)
+{
+    cout<<"borrow from right"<<endl;
+    node * left = root->child[pos];
+    node * right = root->child[pos + 1];
+    left->data[left->cnt] = root->data[pos];
+    left->child[left->cnt+1] = right->child[0];
+    root->data[pos] = right->data[0];
+    for(int i = 0; i<right->cnt-1; i++){
+        right->data[i] = right->data[i+1];
+        right->child[i] = right->child[i+1];
+    }
+    right->child[right->cnt-1] = right->child[right->cnt];
+    right->cnt --;
+    left->cnt++;
+}
+
+int leafcount = 0;
 // print tree
 void treePrint(node * root, int width)
 {
@@ -237,13 +315,11 @@ void treePrint(node * root, int width)
             treePrint(root->child[i],width + 5);
             for(int j=0; j<width; j++) cout<<" ";
             cout<<root->data[i]<<endl;
+            if(root->leaf) leafcount++;
         }
         treePrint(root->child[root->cnt],width + 5);
     }
 }
-// search key in tree
-
-//          
 
 int main(){
     node * root;
@@ -252,5 +328,11 @@ int main(){
         Insert(i,root);
     }
     treePrint(root,0);
+    int p;
+    while(cin>>p){
+        if(p == -1) break;
+        deleteKey(root,p);
+        treePrint(root,0);
+    }
     return 0;
 }
