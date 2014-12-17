@@ -233,7 +233,7 @@ void combineTwoNode(node *&root, int p_key)
         left->data[T+i] = right->data[i];
         left->child[T+i] = right->child[i];
     }
-    left->child[T+T] = right->child[T];
+    left->child[left->cnt+right->cnt] = right->child[right->cnt];
     left->cnt = T+T-1;
     left->leaf = right->leaf;
     delete right;
