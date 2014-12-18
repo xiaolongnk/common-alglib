@@ -179,7 +179,7 @@ void deleteKey(node* &root, int key){
                 }else {
                 // 合并两个节点
                     combineTwoNode(root, pos);
-                    deleteKey(root->child[pos],key);
+                    deleteKey(root,key);
                 }
             }
         }else {
@@ -196,7 +196,7 @@ void deleteKey(node* &root, int key){
                 }else {
                 // 需要合并两个孩子
                     combineTwoNode(root,pos);
-                    deleteKey(root->child[pos],key);
+                    deleteKey(root,key);
                 }
             }else {
                 deleteKey(child, key);
@@ -316,7 +316,7 @@ void borrowFromLeft(node *&root, int pos)
         right->child[i+1] = right->child[i];
     }
     right->child[1] = right->child[0];
-    right->data[0] = root->data[pos];
+    right->data[0] = root->data[pos-1];
     right->cnt++;
     right->child[0] = left->child[left->cnt];
     root->data[pos-1] = left->data[left->cnt-1];
@@ -372,12 +372,13 @@ void test()
     node * root;
     BtreeAlloc(root);
     int a[100];
-    int size = 20;
+    int size = 100;
     for(int i = 0; i< size; i++){
         Insert(i,root);
         a[i] = i;
     }
     randomShuffle(a, size);
+    treePrint(root,0);
     for(int i=0; i<size; i++){
         cout<<"delete "<<a[i]<<" begin "<<cnt <<" cnt "<<endl;
         deleteKey(root,a[i]);
