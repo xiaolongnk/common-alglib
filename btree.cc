@@ -7,10 +7,12 @@
 #include <stdio.h>
 #include <cstdlib>
 
-
 using namespace std;
 
 // T order of  btree;
+
+const int debug = 0;
+
 
 const int T = 3;
 const int maxc = T + T;
@@ -137,12 +139,14 @@ void BtreeSplitChild(node *&x, int i, node *&y){
 // delete key in tree; 从以root为根的子树中删除关键字key.
 void deleteKey(node* &root, int key){
     if(root){
-        cout<<"--------------------------"<<endl;
-        treePrint(root,0);
-        cout<<"--------------------------"<<endl;
+        if(debug){
+            cout<<"--------------------------"<<endl;
+            treePrint(root,0);
+            cout<<"--------------------------"<<endl;
+        }
         bool in_node = false;
-        int pos = root->cnt - 1;
-        node * child = root->child[pos+1];
+        int pos = root->cnt;
+        node * child = root->child[pos];
         for(int i=0; i< root->cnt; i++){
             if(root->data[i] == key){
                 in_node = true;
@@ -150,7 +154,7 @@ void deleteKey(node* &root, int key){
                 pos = i;
                 break;
             }
-            if(root->data[i] > key ){
+            if( key < root->data[i]){
                 pos = i;
                 child = root->child[pos];
                 break;
@@ -183,7 +187,7 @@ void deleteKey(node* &root, int key){
             if(child->cnt == T-1){
                 // 看左边的兄弟节点
                 if(pos - 1 >=0 && root->child[pos-1]->cnt > T-1){
-                    borrowFromLeft(root, pos - 1);
+                    borrowFromLeft(root, pos);
                     deleteKey(child, key);
                 }else if( pos + 1 <= root->cnt && root->child[pos+1]->cnt > T-1){
                 //可以和右边的兄弟节点
@@ -204,7 +208,7 @@ void deleteKey(node* &root, int key){
 // 从叶节点删除一个关键字
 void dropFromLeaf(node *& root, int key)
 {
-    cout<<"here delete from leaf"<<endl;
+    if(debug) cout<<"here delete from leaf"<<endl;
     int len = root->cnt;
     int pos = 0;
     for(int i=0 ; i<root->cnt; i++){
@@ -224,26 +228,59 @@ void dropFromLeaf(node *& root, int key)
  */ 
 void combineTwoNode(node *&root, int p_key)
 {
-    node * left = root->child[p_key];
-    node * right = root->child[p_key+1];
+    node * left, * right;
+    if(p_key == root->cnt){
+        left  = root->child[p_key];
+        right = root->child[p_key-1];
+        int px = right->cnt + 1;
+        for(int i=0; i<left->cnt; i++){
+            left->data[px+i] = left->data[i];
+            left->child[px+i] = left->child[i];
+        }
+        left->child[px+left->cnt] = left->child[left->cnt];
+        for(int i=0; i<right->cnt;i++){
+            left->data[i] = right->data[i];
+            left->child[i] = right->child[i];
+        }
+        left->data[right->cnt] = root->data[p_key-1];
+        left->child[right->cnt] = right->child[right->cnt];
+        
+        left->cnt += right->cnt + 1;
+        left->leaf = right->leaf;
+        // 调整root的孩子指针。
+        root->child[p_key-1] = root->child[p_key];
+        root->cnt--;
+        if(root->cnt==0) {
+            root = left;
+        }
+        delete right;
+        if(debug) cout<<"here I am"<<endl;
 
-    left->data[T-1] = root->data[p_key];
+    }else {
+        left  = root->child[p_key];
+        right = root->child[p_key + 1];
+        left->data[left->cnt] = root->data[p_key];
 
-    for(int i=0; i<right->cnt; i++){
-        left->data[T+i] = right->data[i];
-        left->child[T+i] = right->child[i];
+        for(int i=0; i<right->cnt; i++){
+            left->data[left->cnt+i+1] = right->data[i];
+            left->child[left->cnt+i+1] = right->child[i];
+        }
+        left->child[left->cnt + right->cnt +1] = right->child[right->cnt];
+        left->cnt = left->cnt + right->cnt + 1;
+        left->leaf = right->leaf;
+
+        for(int i=p_key; i < root->cnt - 1; i++){
+            root->data[i] = root->data[i+1];
+            if(i+2 <= root->cnt) root->child[i+1] = root->child[i+2];
+        }
+        root->cnt--;
+        if(root->cnt==0) {
+            root = left;
+        }
+        delete right;
+        if(debug) cout<<"combine finished"<<endl;
     }
-    left->child[T+T] = right->child[T];
-    left->cnt = T+T-1;
-    left->leaf = right->leaf;
-    delete right;
 
-    for(int i=p_key; i < root->cnt - 1; i++){
-        root->data[i] = root->data[i+1];
-        if(i+2 <= root->cnt) root->child[i+1] = root->child[i+2];
-    }
-    root->cnt--;
-    cout<<"combine finished"<<endl;
 }
 
 // 前驱节点 前驱节点中最大的 data 就是需要的值。
@@ -271,9 +308,9 @@ node * successor(node * root)
 
 void borrowFromLeft(node *&root, int pos)
 {
-    cout<<"borrow from left"<<endl;
-    node * left = root->child[pos];
-    node * right = root->child[pos + 1];
+    if(debug) cout<<"borrow from left"<<endl;
+    node * right= root->child[pos];
+    node * left= root->child[pos - 1];
     for(int i = right->cnt ; i>0; i--){
         right->data[i] = right->data[i-1];
         right->child[i+1] = right->child[i];
@@ -282,7 +319,7 @@ void borrowFromLeft(node *&root, int pos)
     right->data[0] = root->data[pos];
     right->cnt++;
     right->child[0] = left->child[left->cnt];
-    root->data[pos] = left->data[left->cnt-1];
+    root->data[pos-1] = left->data[left->cnt-1];
     left->cnt--;
 }
 /*
@@ -291,7 +328,7 @@ void borrowFromLeft(node *&root, int pos)
  */
 void borrowFromRight(node *&root, int pos)
 {
-    cout<<"borrow from right"<<endl;
+    if(debug) cout<<"borrow from right"<<endl;
     node * left = root->child[pos];
     node * right = root->child[pos + 1];
     left->data[left->cnt] = root->data[pos];
@@ -321,18 +358,46 @@ void treePrint(node * root, int width)
     }
 }
 
-int main(){
+inline void randomShuffle(int *p, int size)
+{
+	for(int i=0; i< size - 1; i++)
+	{
+		int temp = rand()%(size-1);
+		swap(p[size-i-1],p[temp]);
+	}
+}
+int cnt = 0;
+void test()
+{
     node * root;
     BtreeAlloc(root);
-    for(int i=0; i<28; i++){
+    int a[100];
+    int size = 20;
+    for(int i = 0; i< size; i++){
         Insert(i,root);
+        a[i] = i;
     }
-    treePrint(root,0);
-    int p;
-    while(cin>>p){
-        if(p == -1) break;
-        deleteKey(root,p);
+    randomShuffle(a, size);
+    for(int i=0; i<size; i++){
+        cout<<"delete "<<a[i]<<" begin "<<cnt <<" cnt "<<endl;
+        deleteKey(root,a[i]);
+        cnt ++;
         treePrint(root,0);
+        cout<<"delete "<<a[i]<<" finished"<<endl;
     }
+}
+int main(){
+    test();
+//    node * root;
+//    BtreeAlloc(root);
+//    for(int i=0; i<28; i++){
+//        Insert(i,root);
+//    }
+//    int p;
+//    while(cin>>p){
+//        if(p == -1) break;
+//        deleteKey(root,p);
+//        treePrint(root,0);
+//    }
     return 0;
 }
