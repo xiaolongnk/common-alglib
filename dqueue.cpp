@@ -1,6 +1,5 @@
 /*
  *	Try to implement the dqueue class!
- *	By ouxiaolong!
  *	2013-5-8
  */
 
@@ -15,90 +14,90 @@ typedef int eletype;
 
 class dqueue
 {
-	eletype *dt;
-	int front;
-	int tail;
-	int size;
-	public:
-	dqueue()
-	{
-		dt = NULL;
-		front=0,tail=0;
-	}
-	// create a list with length n;
-	void Create(int n)
-	{
-		dt = new eletype[n];
-		size =n;
-		front=0;
-		tail = size-1;
-	}
-	void inc(int &t)
-	{
-		if( t== size-1 ) t=0;
-		else  t++;
-	}
-	void dec( int &t)
-	{
-		if(t==0) t=size-1;
-		else --t;
-	}
-	void print()
-	{
-		if( IsEmpty())	cout<<endl;
-		else
-		{
-			int temp=front;
-			dec(temp);
-			cout<<dt[temp];
-			dec(temp);
-			for( temp; temp!=tail;dec(temp)) cout<<" "<<dt[temp];
-			cout<<endl;
-		}
-	}
-	bool IsFull()
-	{
-		return tail==front+1;
-	}
-	bool IsEmpty()
-	{
-		int temp=tail;
-		inc(temp);
-		return front==temp;
-	}
-	void AddLeft(eletype data)
-	{
-		if( !IsFull())
-		{
-			dt[front]=data;
-			inc(front);
-			print();
-		}
-		else cout<<"FULL"<<endl;
+    eletype *dt;
+    int front;
+    int tail;
+    int size;
+    public:
+    dqueue()
+    {
+        dt = NULL;
+        front=0,tail=0;
+    }
+    // create a list with length n;
+    void Create(int n)
+    {
+        dt = new eletype[n];
+        size =n;
+        front=0;
+        tail = size-1;
+    }
+    void inc(int &t)
+    {
+        if( t== size-1 ) t=0;
+        else  t++;
+    }
+    void dec( int &t)
+    {
+        if(t==0) t=size-1;
+        else --t;
+    }
+    void print()
+    {
+        if( IsEmpty())	cout<<endl;
+        else
+        {
+            int temp=front;
+            dec(temp);
+            cout<<dt[temp];
+            dec(temp);
+            for( temp; temp!=tail;dec(temp)) cout<<" "<<dt[temp];
+            cout<<endl;
+        }
+    }
+    bool IsFull()
+    {
+        return tail==front+1;
+    }
+    bool IsEmpty()
+    {
+        int temp=tail;
+        inc(temp);
+        return front==temp;
+    }
+    void AddLeft(eletype data)
+    {
+        if( !IsFull())
+        {
+            dt[front]=data;
+            inc(front);
+            print();
+        }
+        else cout<<"FULL"<<endl;
 
-	};
-	void AddRight(eletype data)
-	{
-		if( !IsFull())
-		{
-			dt[tail]=data;
-			dec(tail);
-			print();
-		}
-		else cout<<"FULL"<<endl;
+    };
+    void AddRight(eletype data)
+    {
+        if( !IsFull())
+        {
+            dt[tail]=data;
+            dec(tail);
+            print();
+        }
+        else cout<<"FULL"<<endl;
 
-	};
-	void DeleteRight()
-	{
-		if( !IsEmpty())
-		{
-			inc(tail);
-			print();
-		}
-		else cout<<"EMPTY"<<endl;
-	};
-	void DeleteLeft()
-	{
+    };
+    void DeleteRight()
+    {
+        if( !IsEmpty())
+        {
+            inc(tail);
+            print();
+        }
+        else cout<<"EMPTY"<<endl;
+    };
+    void DeleteLeft()
+    {
 		if( !IsEmpty())
 		{
 			dec(front);

@@ -1,10 +1,5 @@
 /*
- * Description :A standard impletation of bellmanford algorithm!
- *              This can be used to caculate when the weight of the edge
- *              can be negative! 
- *              Adjance without pointer!
- * Author   :   light_light
- * Date: 2012--7--4
+ * bellmanford 算法
  */
 #include <iostream>
 #include <queue>
