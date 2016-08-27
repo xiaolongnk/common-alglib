@@ -7,8 +7,8 @@ Alglib
 2. 2分查找 b_search.cpp
 3. B树     btree.cpp
 
----|----|----
 序号| 说明|对应文件
+---|----|----
 1 | AVL 树| avltree.cpp
 2 | 二分查找 | b_search.cpp
 3 | B树| btree.cpp 
