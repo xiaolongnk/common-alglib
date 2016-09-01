@@ -1,6 +1,6 @@
 /*
  * bellmanford 算法
- */
+ *:qa
 #include <iostream>
 #include <queue>
 #include <cstring>
