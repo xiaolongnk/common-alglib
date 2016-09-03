@@ -44,13 +44,7 @@ def buildList(n):
         cnt+=1
     return head
 
-
-
-
-    return head
-
 def printList(head):
-    flag = 0
     while head != None:
         print head.val,
         head = head.next

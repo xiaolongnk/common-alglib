@@ -36,7 +36,7 @@ def genList(head):
             prev = tmp
     return head
 
-def printList(head):
+def printlist(head):
     tmp = head
     while tmp:
         print tmp.val,
