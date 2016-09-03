@@ -11,20 +11,14 @@ class Solution(object):
         :type root: TreeNode
         :rtype: int
         """
-        currentAns = 0
-        p = self.printTree(root , currentAns , False)
-        np = self.printTree(root , currentAns , True)
-        return p > np ? p : np
+        return self.pickNode(root)[0]
 
-    def pickNode(root , currentAns  , flag):
-        if root:
-            return currentAns
-        if flag :
-            pickNode(root->l , currentAns , False)
-            pickNode(root->r , currentAns , False)
-        else:
-            pickNode(root->l , currentAns + root.val,True)
-            pickNode(root->r , currentAns + root.val,True)
+    def pickNode(self , root):
+        if not root:
+            return 0,0
+        robL , noRobL = self.pickNode(root.left)
+        robR , noRobR = self.pickNode(root.right)
+        return max(robL + robR , root.val + noRobL + noRobR) , robL + robR
 
 def run():
     pass
