@@ -9,7 +9,7 @@ if __name__ == '__main__':
     fileName = sys.argv[1]
     try:
         ss = "from " + fileName + " import run"
-        print ss
+        print ss,"\n"
         exec(ss)
     except:
         print "Script not found";
