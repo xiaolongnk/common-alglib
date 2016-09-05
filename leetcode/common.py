@@ -44,7 +44,7 @@ class CommonUtil(object):
         root.right.right = TreeNode(20)
         return root
     @staticmethod
-    def printTree(root , depth):
+    def printTree(root , depth = 0):
         if root:
             CommonUtil.printTree(root.right , depth+2)
             for i in range(0,depth):
