@@ -44,7 +44,7 @@ class Solution(object):
             hashmap[ord(s[i])] = i
         return maxLen
 
-if __name__ == '__main__':
+def run():
     s = Solution()
     test = "casdkfalsdfjuiy"
     print s.lengthOfLongestSubstringV1(test)

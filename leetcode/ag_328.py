@@ -50,7 +50,7 @@ def printList(head):
         head = head.next
     print "\n";
 
-if __name__ == '__main__':
+def run():
     ns = Solution()
     head = buildList(3)
     printList(head)

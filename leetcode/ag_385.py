@@ -36,6 +36,6 @@ class Solution(object):
 
 
 
-if __name__=='__main__':
+def run():
     ns = Solution()
     print ns.deserialize("[123,3,[32,2,[33,24],3]]");

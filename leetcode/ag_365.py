@@ -17,7 +17,7 @@ class Solution(object):
         return self.gcd(b%a , a)
 
 
-if __name__=='__main__':
+def run():
     sn = Solution()
     a = 3
     b = 5

@@ -32,7 +32,7 @@ class Solution(object):
         return self.nums
 
 
-if __name__=='__main__':
+def run():
     nums =[1,2,3,4,9,12,24]
     ns = Solution(nums)
     print ns.shuffle()

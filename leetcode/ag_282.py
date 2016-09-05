@@ -28,7 +28,7 @@ class Solution(object):
                 self.solve(num , target , retList , i+1 , path + '-' + curstr , current - currentval , -currentval)
                 self.solve(num , target , retList , i+1 , path + '*' + curstr , current - prev + prev * currentval , prev * currentval)
 
-if __name__=='__main__':
+def run():
     sn = Solution()
     num = "105"
     target = 5

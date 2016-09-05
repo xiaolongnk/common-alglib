@@ -43,7 +43,7 @@ class LRUCache(object):
     def mprint(self):
         print self.ldict
 
-if __name__=='__main__':
+def run():
     lru = LRUCache(3)
     lru.set(1,1)
     lru.set(2,2)

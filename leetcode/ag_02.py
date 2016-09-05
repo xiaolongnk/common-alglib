@@ -78,7 +78,7 @@ class Solution(object):
         return head
 
 
-if __name__ == '__main__':
+def run():
     Sol = Solution()
     l1 = Sol.gen_link_list(1)
     l2 = Sol.gen_link_list(2)

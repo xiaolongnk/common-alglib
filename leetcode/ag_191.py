@@ -11,6 +11,6 @@ class Solution(object):
             n = n>>1
         return cnt
 
-if __name__ == '__main__':
+def run():
     ns = Solution()
     print ns.hammingWeight(7)

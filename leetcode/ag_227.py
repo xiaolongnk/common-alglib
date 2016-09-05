@@ -51,7 +51,7 @@ class Solution(object):
             lt.append(int(t_token))
         return self.swipeHighLevelOp(lt)
 
-if __name__ == '__main__':
+def run():
     s = "123*2-3+3 *2/3"
     ns = Solution()
     print ns.calculate(s)

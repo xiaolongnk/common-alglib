@@ -46,7 +46,7 @@ def printlist(head):
 
     pass
 
-if __name__=='__main__':
+def run():
     head = ListNode(-1)
     nh = genList(head)
     mapp = dict()

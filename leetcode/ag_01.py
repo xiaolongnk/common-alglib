@@ -15,7 +15,7 @@ class Solution(object):
         return ans
 
 
-if __name__ == '__main__':
+def run():
      test = [13,  11, 7, 15 ,2]
      target = 9
      s = Solution()

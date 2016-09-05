@@ -52,7 +52,7 @@ def printList(head):
         head = head.next
     print "\n";
 
-if __name__=='__main__':
+def run():
     head = buildList()
     ns = Solution()
     head = ns.removeNthFromEnd(head , 1)

@@ -45,7 +45,7 @@ class Solution(object):
             lt.append(int(t_token))
         return self.cal(lt)
 
-if __name__ == '__main__':
+def run():
     s = "1123 - 100 - (12 - 3 - (3 + 5)) + (1 +2) "
     ns = Solution()
     print ns.calculate(s)
