@@ -36,25 +36,59 @@ class Solution(object):
                 ret += str(tmp)
             return ret[::-1]
         
-
-        
-        n1 = num1[::-1]
+        def mmul(s1 , n):
+            s1 = s1[::-1]
+            ans = ""
+            ai = 0
+            for i in s1:
+                tmp = int(i) * int(n) + ai
+                ai = tmp/10
+                ans += str(tmp%10)
+            if ai:
+                ans += str(ai)
+            return ans[::-1]
         n2 = num2[::-1]
         ans = ""
         cnt = 0
         for i in n2:
-            tmp_str = ""
-            incnt = 0
-            for j in n1:
-                current = str(int(i) * int(j))
-                tmp_str = madd(tmp_str , current,incnt)
-                incnt +=1
-            ans = madd(ans , tmp_str,cnt)
+            tmpstr = mmul(num1 , i)
+            ans = madd(ans , tmpstr ,cnt)
             cnt+=1
         if ans[0] == '0': 
             return "0"
         return ans
 
+class Solution1(object):
+
+    def multiply(self , num1 , num2):
+        if num1 == '' or num2 == '':
+            return '0'
+        len1 = len(num1)
+        len2 = len(num2)
+        ans = []
+        for i in range(0,len1 + len2):
+            ans.append(0)
+        i = len1-1
+        while i>= 0:
+            j = len2-1
+            while j>= 0:
+                tmpInt = int(num1[i]) * int(num2[j]) + ans[i+j+1]
+                ans[i+j+1] = tmpInt%10
+                ans[i+j]  += tmpInt/10
+                j-=1
+            i-=1
+
+        flag = False
+        ret = ''
+        for i in ans:
+            if i and flag == False:
+                flag = True
+            if flag == True:
+                ret += str(i)
+        if flag == False:
+            return '0'
+        return ret
+
 def run():
-    so = Solution()
-    print so.multiply("123","0")
+    so = Solution1()
+    print so.multiply("887215951631860898850672165670178191617772888069065122540029356168329298406","44311453195435793851382571199824255312824367056642992271581465800553855214")
