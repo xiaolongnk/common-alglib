@@ -7,11 +7,7 @@ tags:
 -
 -
 ---
-#### String to Integer (atoi)
-
-
-
-##### Requirements for atoi:
+#### 
 
 #### 分析
 
