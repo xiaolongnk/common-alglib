@@ -1,9 +1,8 @@
 ---
 title: 
 date: 
-categories:
-- leetcode
 tags:
+- leetcode
 -
 -
 ---
