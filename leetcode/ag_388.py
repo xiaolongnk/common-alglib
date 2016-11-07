@@ -10,6 +10,8 @@
 @date: 2016-11-04 15:31
 '''
 
+GLOBAL_DEBUG = 0
+
 class Solution(object):
     def lengthLongestPath(self, input):
         """
@@ -18,22 +20,17 @@ class Solution(object):
         """
         max_len = 0
         stack = []
-        dir_path = []
         dirs = input.split('\n')
         for i in dirs:
             dirname = i.strip('\t')
             tabs = len(i) - len(dirname)
             while tabs < len(stack):
                 stack.pop()
-                dir_path.pop()
             stack.append(len(dirname))
-            dir_path.append(dirname)
             if '.' in dirname:
                 if max_len < sum(stack) + len(stack) - 1:
-                    dir_path.append(dirname)
                     max_len = sum(stack) + len(stack) - 1
-        print dir_path
-        print max_len
+        return max_len
 
 class NewSolution(object):
 
@@ -44,20 +41,21 @@ class NewSolution(object):
         for i in dirs:
             filecnt = filecnt + 1
             if '.' in i:
+                if GLOBAL_DEBUG:
+                    print "filecnt for %s is %d"%(i,filecnt)
                 tmpfile = i.strip('\t')
                 tabs = len(i) - len(i.strip('\t'))
-                searchcnt = 0
                 flag = 0
-                print "now porcess for file %s"%tmpfile
                 while tabs >= 0:
                     ttt = ''
+                    searchcnt = 0
                     for j in dirs:
+                        searchcnt += 1
                         lenoftabs = len(j) -len(j.strip('\t'))
                         if tabs == 0  and lenoftabs == 0 and flag == 0:
                             ttt = j
                             break
                         if searchcnt > filecnt:
-                            print "exit for %s"%tmpfile
                             break
                         if '.' in j:
                             continue
@@ -65,7 +63,8 @@ class NewSolution(object):
                             if lenoftabs == 0:
                                 flag = 1
                             ttt = j.strip('\t')
-                        searchcnt += 1
+                        if GLOBAL_DEBUG:
+                            print "%s  , %s , %s"%(filecnt , j , tabs)
                     if ttt:
                         tmpfile = ttt + '/' + tmpfile
                     tabs = tabs - 1
