@@ -21,39 +21,35 @@ int search(int* nums, int numsSize, int target) {
         printf("  target is  %d\n", target);
         puts("****** origin nums ******");
     }
-
-    int left = 0 , right = numsSize  -1 , middle = 0;
-    int min_pos = -1;
-    while( left <= right ){
-
+    // here find max element
+    int left = 0 , right = numsSize  -1 , middle = 0 , max_pos = 0;
+    while( left < right -1 ){
+        middle = (left + right) >> 1;
         if(nums[middle] > nums[left]){
-            right = middle;
-        }else {
             left = middle;
+        }else {
+            right = middle;
         }
-        
     }
+
+    if(nums[left] < nums[right]) max_pos = right;
+    else max_pos = left;
+
     int ans = -1;
-    if(DEBUG) printf("max_pos is %d min_pos is %d \n", max_pos, min_pos);
+    if(DEBUG) printf("max_pos is %d \n", max_pos);
     
-    if(min_pos != -1){
-        ans = binary_find(nums , 0 , min_pos - 1 , target);
-        if(ans == -1){
-            ans = binary_find(nums , min_pos , numsSize - 1, target);
-        }
-    }else if(max_pos != -1){
-        ans = binary_find(nums , 0 , max_pos , target);
-        if(ans == -1){
-            ans = binary_find(nums , max_pos + 1 , numsSize - 1, target);
-        }
+    ans = binary_find(nums , 0 , max_pos , target);
+    if(ans == -1){
+        ans = binary_find(nums , max_pos + 1 , numsSize - 1, target);
     }
+
     if(DEBUG) printf("find ans %d\n\n\n",ans);
     return ans;
 }
 
 int binary_find(int *p , int left , int right , int target)
 { 
-    printf("call binary_find with %d  %d " , left , right);
+    if(DEBUG) printf("call binary_find with %d  %d " , left , right);
     int middle = 0;
     int ans = -1;
     while(left <= right){
@@ -72,7 +68,12 @@ int binary_find(int *p , int left , int right , int target)
     }
     return ans;
 }
-
+/**
+ * find min element in an array like 
+ *      [7,8,9,1,2,3]
+ *      [5,6,7,1,2,3]
+ *      [1,2,3,4,5,7]
+ */
 int findMin(int * p , int arraySize , int target)
 {
     int left =0 , right = arraySize - 1 , middle;
