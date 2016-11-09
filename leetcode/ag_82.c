@@ -10,37 +10,42 @@ struct ListNode {
 
 struct ListNode* deleteDuplicates(struct ListNode* head) {
     struct ListNode * tmp = head, *pre = NULL;
-    int del_flag = 0;
-
     while(tmp){
         if(tmp->next){
             if(tmp->val != tmp->next->val){
-                if(del_flag == 1){
-                    pre->next = tmp->next;
-                    pre = pre->next;
-                    del_flag = 0;
-                }else {
-                    pre = tmp;
-                    if(DEBUG) {
-                        printf("pre updated with :%d \n",tmp->val);
-                    }
+                if(pre == NULL) {
+                    head = tmp;
                 }
-                tmp = tmp->next;
+                pre = tmp;
+                if(DEBUG) {
+                    printf("pre updated with :%d \n",tmp->val);
+                }
             }else {
-                if(pre == NULL) pre = tmp;
-                if (DEBUG) {
-                    printf("remove element  %d \n",tmp->next->val);
+                while(tmp->next && tmp->val == tmp->next->val){
+                    if (DEBUG) {
+                        printf("remove element  %d \n",tmp->next->val);
+                    }
+                    tmp->next = tmp->next->next;
                 }
-                tmp->next = tmp->next->next;
-                del_flag = 1;
+                if( pre ){
+                    pre->next = tmp->next;
+                    if (DEBUG) {
+                        printf("delete element  %d \n",tmp->val);
+                    }
+                } else {
+                    if (DEBUG) {
+                        printf("delete element  %d \n",tmp->val);
+                    }
+                    head = pre;
+                }
             }
-        }else {
+            tmp = tmp->next;
+        } else {
+            if(pre == NULL) {
+                head =  tmp;
+            }
             break;
         }
-    }
-    if(del_flag) {
-        if(pre == head) head = NULL;
-        else pre->next = NULL;
     }
     return head;
 }
@@ -63,12 +68,12 @@ int main()
         t1[i] = malloc(sizeof(struct ListNode));
     }
     t1[0]->val = 1;
-    t1[1]->val = 1;
-    t1[2]->val = 2;
-    t1[3]->val = 2;
-    t1[4]->val = 3;
-    t1[5]->val = 3;
-    t1[6]->val = 3;
+    t1[1]->val = 2;
+    t1[2]->val = 3;
+    t1[3]->val = 3;
+    t1[4]->val = 4;
+    t1[5]->val = 4;
+    t1[6]->val = 5;
     t1[0]->next = t1[1];
     t1[1]->next = t1[2];
     t1[2]->next = t1[3];
@@ -79,5 +84,5 @@ int main()
     printList(t1[0]);
     struct ListNode * hhh = deleteDuplicates(t1[0]);
     printList(hhh);
-    
+
 }
