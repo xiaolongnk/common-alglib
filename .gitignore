@@ -2,3 +2,4 @@
 *.dSYM
 *.run
 leetcode/*.pyc
+*.swp
