@@ -20,18 +20,7 @@ class Solution {
             const char dot = '.';
             string block;
             if(IP.substr(0 , 4).find(dot) != string::npos) {
-                int dotcnt = 0;
-                for(int j = 0 ; j < IP.length(); ++j) {
-                    if(IP[j] == dot || (IP[j]!=dot && j == IP.size() - 1)) {
-                        if(IP[j] == dot) dotcnt++;
-                        if(!ip4bv(block)) return ans[2];
-                        block.clear();
-                    } else {
-                        block += IP[j];
-                    }
-                }
-                if(dotcnt>3) return ans[2];
-                return ans[0];
+
             } else if (IP.substr(0 , 5).find(comma) != string::npos) {
                 int commacnt = 0;
                 int conjective_flag = 0;
@@ -62,28 +51,6 @@ class Solution {
             return ans[2];
         }
 
-        bool ip4bv(string &block) {
-            if(block.length() > 3) return false;
-            short sum = 0;
-            if(block[0] == '0' && block.length() > 1) return false;
-            for(int i =0 ; i < block.length() ; ++i) {
-                if( block[i] < '0' && block[i] >'9' ) return false;
-                sum += (block[i] - '0') * 10; 
-            }
-            if(sum>255) return false;
-            return true;
-        }
-
-        bool ip6bv(string &block) {
-            if(block.length() >4 ) return false;
-            const string ip6charset ="0123456789abcdefABCDEF";
-            for(int i = 0 ; i < block.length() ; ++i) {
-                if(ip6charset.find(block[i])==string::npos) {
-                    return false;
-                }
-            }
-            return true;
-        }
 };
 
 
