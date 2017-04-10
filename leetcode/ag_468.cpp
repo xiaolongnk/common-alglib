@@ -49,7 +49,7 @@ class Solution {
                         ++current_len;
                         if(current_len > 4) return ans[2];
                     }
-                    if((ip[j] == comma || ( j == ip.size() - 1 ) && current_len) {
+                    if((ip[j] == comma || ( j == ip.size() - 1 && ip[j] != comma ) && current_len) {
                         ++word_count;
                         current_len = 0;
                     }
