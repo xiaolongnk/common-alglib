@@ -1,9 +1,7 @@
-/**********************************************************
-> File Name: heapSort.cpp
-> Author: xiaolongou
-> Mail: xiaolongnk@126.com 
-> Created Time: 2013年12月11日 星期三 19时40分59秒
- **********************************************************/
+/*************************
+ * author: xiaolongou
+ * date:  2013-12-11 19:40
+ ************************/
 #include "comm.h"
 #include <iostream>
 #include <cstdlib>
@@ -39,16 +37,10 @@ void heapfy(int *p, int pos, int size){
         return;
     }
     if(right <= size){
-        if(p[left] < p[right]){
-            if( p[pos] < p[right] ){
-                swap(p[pos],p[right]);
-                heapfy(p,right,size);
-            }
-        }else if(p[left] > p[right]){
-            if( p[pos] < p[left]){
-                swap(p[pos],p[left]);
-                heapfy(p,left,size);
-            }
+        int max_i = p[left] < p[right] ? right : left ;
+        if(p[pos] < p[max_i]) {
+            swap(p[pos] , p[max_i]);
+            heapfy(p , max_i , size);
         }
     }
 }
