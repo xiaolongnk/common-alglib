@@ -19,7 +19,11 @@ DEPS := $(patsubst %.o,%.d,$(OBJS))
 MISSING_DEPS := $(filter-out $(wildcard $(DEPS)),$(DEPS))
 MISSING_DEPS_SOURCES := $(wildcard $(patsubst %.d,%.cpp,$(MISSING_DEPS)))
 
-#
+#1. get latest modified cpp 
+#2. get it's Solution class , origin file OSRC.
+#3. Replace Solution class in main.cpp with Solution from OSRC; 
+#4. Replace run function in main.cpp with run method in main.cpp;
+
 GET_FILES := $(sed 's/hello/HELLO/g' main.cpp) 
 
 .PHONY : all deps objs clean veryclean rebuild info
