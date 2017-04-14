@@ -19,9 +19,13 @@ DEPS := $(patsubst %.o,%.d,$(OBJS))
 MISSING_DEPS := $(filter-out $(wildcard $(DEPS)),$(DEPS))
 MISSING_DEPS_SOURCES := $(wildcard $(patsubst %.d,%.cpp,$(MISSING_DEPS)))
 
+#
+GET_FILES := $(sed 's/hello/HELLO/g' main.cpp) 
+
 .PHONY : all deps objs clean veryclean rebuild info
 
-all: $(EXECUTABLE)
+
+all: $(GET_FILES) $(EXECUTABLE)
 
 deps: $(DEPS)
 
