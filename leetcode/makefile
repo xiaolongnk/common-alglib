@@ -24,10 +24,10 @@ MISSING_DEPS_SOURCES := $(wildcard $(patsubst %.d,%.cpp,$(MISSING_DEPS)))
 #3. Replace Solution class in main.cpp with Solution from OSRC; 
 #4. Replace run function in main.cpp with run method in main.cpp;
 
-GET_FILES := $(sed 's/hello/HELLO/g' main.cpp) 
 
 .PHONY : all deps objs clean veryclean rebuild info
 
+GET_FILES := $(shell sed -i 's/hello/HELLO/g' main.cpp) 
 
 all: $(GET_FILES) $(EXECUTABLE)
 
