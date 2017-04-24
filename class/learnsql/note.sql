@@ -42,11 +42,19 @@ update we_worker set in_time=date_sub(in_time , interval 3 month) where id = 10;
 
 select * from we_worker where in_time <= date_sub(now() , interval 1 year) ;
 
+/** 8. 每个课程的开课数量 **/
+select class_id , count(*) as count from we_group group by class_id;
+
+/** 9. 每门课程的 课程id , 开课数量，课程名称 **/
+select a.id , r.total, a.name , a.class_description  from we_class as a left join (select class_id , count(*) as total from we_group group by class_id) r on a.id  = r.class_id;
+
+select a.id , r.total, a.name , a.class_description  from we_class as a left join (select class_id , count(*) as total from we_group group by class_id) r on a.id  = r.class_id where r.total is not null;
 
 
+/** 10. 找出还没开班的课程 **/
 
-
-
+select a.id from we_class a left join we_group b on a.id = b.class_id where b.id is null;
+select * from we_class a , we_group b where a.id = b.class_id;
 
 
 SELECT
