@@ -1,35 +1,28 @@
 EXECUTABLE := main    # binary name
 LIBDIR:=              # static library dir
 LIBS :=               # static lib name 
-INCLUDES:=./ojlib/    # user defined header file dir
+INCLUDES:=.    		  # user defined header file dir
 SRCDIR:=              # other src dir , beside current dir '.'
 
-CC:=g++
-CFLAGS := -g -Wall -O3 -std=c++11
+CC:=gcc
+CFLAGS := -g -Wall -O2
 CPPFLAGS := $(CFLAGS)
 CPPFLAGS += $(addprefix -I,$(INCLUDES))
 CPPFLAGS += -MMD
 
 RM-F := rm -f
 
-SRCS := $(wildcard main.cpp) $(wildcard $(addsuffix /*.cpp , $(SRCDIR)))
-#SRCS := $(wildcard *.cpp) $(wildcard $(addsuffix /*.cpp, $(SRCDIR)))
-OBJS := $(patsubst %.cpp,%.o,$(SRCS))
+SRCS := $(wildcard *.c) $(wildcard $(addsuffix /*.c, $(SRCDIR)))
+OBJS := $(patsubst %.c,%.o,$(SRCS))
 DEPS := $(patsubst %.o,%.d,$(OBJS))
 MISSING_DEPS := $(filter-out $(wildcard $(DEPS)),$(DEPS))
-MISSING_DEPS_SOURCES := $(wildcard $(patsubst %.d,%.cpp,$(MISSING_DEPS)))
-
-#1. get latest modified cpp 
-#2. get it's Solution class , origin file OSRC.
-#3. Replace Solution class in main.cpp with Solution from OSRC; 
-#4. Replace run function in main.cpp with run method in main.cpp;
+MISSING_DEPS_SOURCES := $(wildcard $(patsubst %.d,%.c,$(MISSING_DEPS)))
 
 
 .PHONY : all deps objs clean veryclean rebuild info
 
-GET_FILES := $(shell sed -i 's/hello/HELLO/g' main.cpp) 
 
-all: $(GET_FILES) $(EXECUTABLE)
+all: $(EXECUTABLE)
 
 deps: $(DEPS)
 
