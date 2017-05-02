@@ -2,29 +2,41 @@
 
 _NAMESPACE_COMMONLIB_START
 
-static TreeNode * getSampleTree()
+TreeNode * CommonMethod::getSampleTree()
 {
     return NULL;
 }
 
-static TreeNode * getSampleVector()
+vector<int> CommonMethod::getSampleVector()
 {
-    return NULL;
+    vector<int> p;
+    for(int i = 0 ; i < 10; ++i) {
+        p.push_back(i);
+    }
+    CommonMethod::randomShuffle(p);
+    return p;
 }
 
-static ListNode * getSampleLinkList()
+ListNode * CommonMethod::getSampleLinkList()
 {
+    ListNode * head = null;
     return 0;
 }
 
-static void randomShuffle(vector<int> & p)
+void CommonMethod::randomShuffle(vector<int> & p)
 {
-
+	for(int i=0; i<p.size() -1; i++)
+	{
+		int temp = rand()%(p.size() - 1);
+		swap(p[p.size() -i -1],p[temp]);
+	}
 }
 
-static void checkOrder(const vector<int>&p)
+bool CommonMethod::checkOrder(const vector<int>&p)
 {
-
+	for(int i=0; i<p.size() - 1; i++)
+		if(p[i]>p[i+1]) return false;
+	return true;
 }
 
 _NAMESPACE_COMMONLIB_END
