@@ -1,10 +1,12 @@
 ## 理论知识
 
 #### 一、install mysql-server (client and server)
+
 1. download your mysql-server from this link. https://cdn.mysql.com//Downloads/MySQLInstaller/mysql-installer-community-5.7.17.0.msi
 2. start your mysql-server , connect to your mysql server.
 
 #### 二、base class for mysql.
+
 1. mysql data types  ` int , bigint , char , varchar , text , float , double , decimal , datetime ， timestamp`
 2. some keywords ( `select`,`from`,`where`, `order by`,`desc`,`asc`,`group by`,`+`,`-`,`*`,`/`,`left join`,`right join`,`on`,`in`,`between`, `insert`,`drop`, `delete` ,`alter`....)
 3. show commands;
@@ -23,6 +25,7 @@
 7. 删除操作。drop operations; drop data from tables; drop tables ; drop databases;
 
 #### 三、mysql query:
+
 1. single table select ; (select * from table where xxx);
 2. join table select; (select * from a , b where a.xx = b.xx and a.xx = '123' order by a.xx);
 3. left join table select; select * from a left join b on a.x = b.x and a.c = b.c where a.x = 'xx' and b.c='eee'; left join 的原理。
@@ -33,6 +36,7 @@
 8. ifnull(t,f)    select id,salary,ifnull(salary,0) from salary;
 
 #### 四、mysql中的内置函数
+
 1. now()
 2. date_add , date_sub();  interval 8 days; select date_add(now() , interval 3 day); select date_sub(now() , interval 1 day); month;
 4. upper , lower , left (name , 3) , right (name , 3);lenght(name) , SubString
@@ -52,6 +56,7 @@
 
 
 ## 数据库表结构
+
 1. we_student
 
 	| Field         | Type        | Null | Key | Default             | Extra          |
@@ -118,6 +123,7 @@
 
 
 ## 创建数据库和数据表
+
 1. 创建数据表
 
 	```
@@ -215,6 +221,7 @@
 
 
 ## SQL查询练习 习题
+
 1. 数据库操作，查看库和表结构
 
 	```mysql
