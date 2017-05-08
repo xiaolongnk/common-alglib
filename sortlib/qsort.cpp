@@ -1,8 +1,5 @@
-#include <iostream>
-#include <cstdlib>
 #include "comm.h"
 
-using namespace std;
 int process(int *,int, int);
 
 // left and right is idx of the array;

@@ -3,13 +3,10 @@
  * Description: A Standard implement of insertionsort!
  * For exercise!
  */
-#include <cstdio>
-#include <vector>
-#include <ctime>
-#include <cstdlib>
+#include "comm.h"
+
 #define M 100
 
-using namespace std;
 vector< int > data;
 void insertsort(vector< int > &a)
 {

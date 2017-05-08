@@ -3,10 +3,6 @@
  * date:  2013-12-11 19:40
  ************************/
 #include "comm.h"
-#include <iostream>
-#include <cstdlib>
-
-using namespace std;
 
 #define LEFT(i) (i<<1)+1
 

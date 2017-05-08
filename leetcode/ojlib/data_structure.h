@@ -1,7 +1,6 @@
 #ifndef DATA_STRUCTURE_H_
 #define DATA_STRUCTURE_H_
 
-
 #include <iostream>
 #include <vector>
 #include <map>
@@ -35,14 +34,14 @@ struct ListNode {
     struct ListNode *next;
 };
 
-class CommonLib
+class CommonMethod
 {
     public:
         static TreeNode * getSampleTree();
-        static ListNode * getLinkList();
+        static ListNode * getSampleLinkList();
         static vector<int> getSampleVector();
         static void randomShuffle(vector<int> &p);
-        static void checkOrder(const vector<int> &p);
+        static bool checkOrder(const vector<int> &p);
 };
 
 _NAMESPACE_COMMONLIB_END

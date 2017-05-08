@@ -4,11 +4,7 @@
 > Mail: xiaolongnk@126.com 
 > Created Time: 2013年12月10日 星期二 22时44分30秒
  **********************************************************/
-#include <iostream>
-#include <cstdlib>
 #include "comm.h"
-
-using namespace std;
 
 void merge(int*,int,int,int);
 
