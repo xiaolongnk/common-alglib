@@ -4,6 +4,9 @@
 #define N 1000
 #include <cstdlib>
 #include <iostream>
+#include <cstdio>
+#include <vector>
+#include <ctime>
 
 using namespace std;
 
