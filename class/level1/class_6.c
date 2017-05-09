@@ -1,6 +1,5 @@
 #include <stdio.h>
 
-
 void convert_to_binary(int num)
 {
     if(num < 0) return;
@@ -14,7 +13,7 @@ void convert_to_binary(int num)
 int main()
 {
     int a;
-    while(1) {
+    while (1) {
         printf("please input your integer (any negative integer to quit):");
         scanf("%d",&a);
         if(a < 0) break;
