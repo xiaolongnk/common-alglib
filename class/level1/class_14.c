@@ -9,6 +9,19 @@ struct link_node {
     l_n_ptr next;
 };
 
+void print_link_list(const l_n_ptr head , int total) 
+{
+    int cnt = 0;
+    l_n_ptr m = head;
+    while(m)  {
+        printf("%d  " , m->num);
+        m = m->next;
+        ++cnt;
+        if(cnt >=total )  break;
+    }
+    printf("\n");
+}
+
 l_n_ptr init_node(int cnt)
 {
     l_n_ptr head = NULL , current = NULL;
@@ -32,51 +45,57 @@ l_n_ptr init_node(int cnt)
     return head;
 }
 
-
-
-void print_link_list(const l_n_ptr head) 
-{
-    return;
-    l_n_ptr m = head;
-    while(m)  {
-        printf("%d  " , m->num);
-        m = m->next;
-    }
-    printf("\n");
-}
-
 void process(const l_n_ptr head , const int start_pos , const int total , const int kill_number) 
 {
-    int i = 0;
+    int i = 1;
     l_n_ptr tmp = head;
-    while(i < start_pos) tmp = tmp->next;
-
-    int m_killed = 0;
-    int m_kill_number = 1;
-    l_n_ptr last_node = NULL;
-    while(killed < total - 1) {
-        if(m_kill_number == kill_number) {
-            // remove this node
-            last_node->next = tmp->next;
-            printf("tmp as killed %d\n" , tmp->num);
-            tmp->next = null;
-            free(tmp); // it's very important.
-            ++m_killed;
-        } else {
-            last_node = tmp;
-            tmp = tmp->next;
-
-        }
-        ++m_kill_number;
+    while(i < start_pos) {
+        tmp = tmp->next;
+        ++i;
     }
+    l_n_ptr start_node = tmp;
+
+    // find the previous node 
+    i = 0;
+    while(i < total -1) {
+        tmp = tmp->next;
+        ++i;
+    }
+    l_n_ptr last_node = tmp;
+    // length of the list should be 2 at least.
+    if(last_node == head) {
+        printf("this list contain only one element , no man would left!\n");
+        return;
+    }
+
+    l_n_ptr junk = NULL;
+    int m_killed   = 0;
+    int m_kill_ptr = 0;
+    while(m_killed < total - 1) {
+        ++m_kill_ptr;
+        if(m_kill_ptr == kill_number) {
+            // remove this node
+            printf("person [ %d ] was killed\n" ,start_node->num);
+            last_node->next =start_node->next;
+            start_node->next = NULL;
+            free(start_node); // it's very important.
+            ++m_killed;
+            m_kill_ptr = 0;
+            start_node =last_node->next;
+        } else {
+            last_node  = start_node;
+            start_node = start_node->next;
+        }
+    }
+    printf("only leaft person is %d\n" , start_node->num);
 }
 
 int main()
 {
     int start_pos , total , kill_number;
     printf("please input your start position and number of people and kill number:");
-    scanf("%d%d%d" , start_pos , total , kill_number);
-    l_n_ptr head = init_node(10);
+    scanf("%d%d%d" , &start_pos , &total , &kill_number);
+    l_n_ptr head = init_node(total);
     process(head , start_pos , total , kill_number);
     return 0;
 }
