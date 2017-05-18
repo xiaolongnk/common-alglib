@@ -13,11 +13,10 @@ void print_link_list(const l_n_ptr head , int total)
 {
     int cnt = 0;
     l_n_ptr m = head;
-    while(m)  {
+    while( cnt < total )  {
         printf("%d  " , m->num);
         m = m->next;
         ++cnt;
-        if(cnt >=total )  break;
     }
     printf("\n");
 }
@@ -67,8 +66,6 @@ void process(const l_n_ptr head , const int start_pos , const int total , const 
         printf("this list contain only one element , no man would left!\n");
         return;
     }
-
-    l_n_ptr junk = NULL;
     int m_killed   = 0;
     int m_kill_ptr = 0;
     while(m_killed < total - 1) {
