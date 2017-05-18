@@ -1,9 +1,9 @@
 /****
- * sovle 8 queen problesm.
- * recursive execrise.
- * 2017-05-19 06:53
+ * stack 
+ * stack execrise
+ * 2017-05-19 06:59
  * TODO
- */
+ ***/
 
 #include <stdio.h>
 #include <string.h>
@@ -15,4 +15,3 @@ int main()
 
     return 0;
 }
-
