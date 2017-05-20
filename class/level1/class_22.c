@@ -2,7 +2,6 @@
  * sovle 8 queen problesm.
  * recursive execrise.
  * 2017-05-19 06:53
- * TODO
  */
 
 #include <stdio.h>
