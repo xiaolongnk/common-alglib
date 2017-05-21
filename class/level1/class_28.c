@@ -82,13 +82,13 @@ int q_pop(q_ptr m_q , int * element) {
 int print_queue(const q_ptr m_q) {
     int cnt = m_q->_head;
     while(1) {
+        if(cnt == m_q->_tail) break;
         printf("%d  " , m_q->_data[cnt]);
         if(cnt == m_q->_queue_max) {
             cnt = 0;
         } else {
             ++cnt;
         }
-        if(cnt == m_q->_head || cnt == m_q->_tail) break;
     }
     printf("\n");
     return 0;
@@ -109,7 +109,19 @@ int main()
 {
     q_ptr mmq = (q_ptr) malloc(sizeof(struct user_queue));
     init(mmq);
-    mmq->push(mmq , 1);
+    for(int i = 0 ; i < 10 ; i++) {
+        mmq->push(mmq , i);
+    }
+    mmq->print(mmq);
+    int ele;
+    for(int i = 0 ; i < 10 ; i++) {
+        mmq->pop(mmq , &ele);
+    }
+    mmq->print(mmq);
+
+    for(int i = 0 ; i < 3; i++) {
+        mmq->push(mmq , i);
+    }
     mmq->print(mmq);
     return 0;
 }
