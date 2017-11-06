@@ -2,6 +2,9 @@
 #coding:utf8
 import sys
 import os
+import traceback
+
+
 class bcolors:
     HEADER  = '\033[95m'
     OKBLUE  = '\033[94m'
@@ -16,20 +19,18 @@ if __name__ == '__main__':
     if len(sys.argv) < 2:
         print bcolors.WARNING + "USAGE:[ ./run.py your_script_name ]" + bcolors.ENDC;
         sys.exit(1)
-    fileName = sys.argv[1]
+    file_name = sys.argv[1]
     try:
-        if fileName.endswith(".py"):
-            if os.path.exists(fileName):
-                fileName = fileName.split('.')[0]
-            else:
-                raise Exception("SCRIPT [ %s ] NOT FOUND!"%(fileName))
-        elif os.path.exists(fileName+".py"):
-            ss = "from " + fileName + " import run"
-        else:
-            raise Exception("SCRIPT [ %s ] NOT FOUND!"%(fileName+".py"))
+        if not file_name.endswith(".py"):
+            file_name = file_name + ".py"
+        if not os.path.exists(file_name):
+            raise Exception("SCRIPT [ %s ] NOT FOUND!"%(file_name))
+        module_name = file_name.split('.')[0]
+        sys.path.append(file_name)
+        ss = "from " + module_name + " import run"
         exec(ss)
         print (bcolors.HEADER+"RESULTS [%s] ARE AS FOLLOWS:"+bcolors.ENDC)\
-		%(fileName)
+		%(file_name)
         run()
     except Exception as e:
-        print (bcolors.FAIL + e.args[0] + bcolors.ENDC)
+        traceback.print_exc()
