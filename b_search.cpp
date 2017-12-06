@@ -15,7 +15,7 @@ using namespace std;
 int b_s(int a[], int l,int r,int key) {
 	int m;
 	while( l<r ) {
-		m = ( l + r )>>1;
+		m = ( l + r ) >> 1;
 		if( a[m] == key ) return m;
 		if( a[m] < key ) l = m + 1;
 		else r = m;
