@@ -9,8 +9,8 @@ def make_tree():
     root = TreeNode(1)
     p1 = TreeNode(2)
     p2 = TreeNode(3)
-    root.right = p1
-    p1.left = p2
+    root.left= p1
+    root.right= p2
     return root
 
 def print_tree(root):
