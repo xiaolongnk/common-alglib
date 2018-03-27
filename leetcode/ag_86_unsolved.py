@@ -1,8 +1,6 @@
-# Definition for singly-linked list.
-class ListNode(object):
-    def __init__(self, x):
-        self.val = x
-        self.next = None
+from ojlib.LinkListLib import ListNode
+from ojlib.LinkListLib import ListKit
+
 
 class Solution(object):
     def partition(self, head, x):
@@ -11,13 +9,19 @@ class Solution(object):
         :type x: int
         :rtype: ListNode
         """
-        prev,cur, front, fp = None, head, head, None
-        while front.next:
-            front = front.next
-            if front.val > x:
-                # do this swap job
-                pass
-        return head
+        left = ListNode(0)
+        right = ListNode(0)
+        while head:
+            if head.val >= x:
+                right.next, right = head, right.next
+            else:
+                left.next, left = head, left.next
+            head = head.next
+        left.next = right.next
+        return left.next
 
 def run():
-    pass
+    t = [3,6,1,8,2,22,9]
+    head = ListKit.get_link_list(t)
+    ListKit.print_link_list(head)
+
