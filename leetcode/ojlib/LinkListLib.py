@@ -11,7 +11,7 @@ class ListKit(object):
 def get_link_list(t):
     head = None
     cur = None
-    for i in t:
+    for i in xrange(t):
         if head == None:
             head = ListNode(i)
             cur = head
