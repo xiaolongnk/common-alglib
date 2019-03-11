@@ -26,7 +26,7 @@ int get_current_level()
     return k;
 }
 
-skip_list * init()
+skip_list * skip_list_init()
 {
     srand((unsigned)time(NULL));
     skip_list * sl;
@@ -39,7 +39,7 @@ skip_list * init()
     return sl;
 }
 
-node * find_x(skip_list * sl, int x)
+node * find_x_from_skip_list(skip_list * sl, int x)
 {
     node *h = sl->header[sl->current_level];
     while(h) {
@@ -69,7 +69,7 @@ node * insert_x_into_list(node * head, int x)
     return n;
 }
 
-int insert_x(skip_list * sl, int x)
+int insert_x_into_skip_list(skip_list * sl, int x)
 {
     int level = get_current_level();
     if (level > sl->current_level) {
@@ -85,8 +85,29 @@ int insert_x(skip_list * sl, int x)
     return 0;
 }
 
-int remove_x(skip_list * sl, int x)
+
+int remove_data_from_list(node *head, int x)
 {
+    node * prev = NULL, * true_head = head;
+    while(head) {
+        if (head->key == x) {
+            if (prev) {
+                prev->right = head->right;
+            }
+            delete head;
+        } else {
+            prev = head;
+            head = head->right;
+        }
+    }
+    return 0;
+}
+
+int remove_x_from_skip_list (skip_list * sl, int x)
+{
+    for(int i =0; i<=sl->current_level; ++i) {
+        remove_data_from_list(sl->header[i], x);
+    }
     return 0;
 }
 
@@ -105,7 +126,7 @@ int print_list(skip_list *sl)
 
 int main()
 {
-    skip_list * sl = init();
+    skip_list * sl = skip_list_init();
     print_list(sl);
     return 0;
 }
