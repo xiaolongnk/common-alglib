@@ -6,8 +6,6 @@ using namespace std;
 
 #define MAX_LEVEL 30
 
-#define DEBUG 1
-
 typedef struct node {
     node * right;
     node * down;
@@ -17,6 +15,7 @@ typedef struct node {
 struct skip_list {
     data_node ** header;
     int max_level;
+    int size;
 };
 
 node * height[MAX_LEVEL];
@@ -37,7 +36,7 @@ skip_list * skip_list_init()
     sl->header = new data_node* [MAX_LEVEL];
     for(int i = 0; i< MAX_LEVEL; ++i) {
         data_node * t = new data_node();
-        t->key = -1;
+        t->key = -10;
         t->right = NULL;
         sl->header[i] = t;
     }
@@ -51,19 +50,32 @@ data_node * find_x_from_skip_list(skip_list * sl, int x)
 {
     data_node *h = sl->header[sl->max_level];
     while(h) {
-        if (h->right && x > h->right->key) {
-            h = h->right;
+        if (h->key == x && h->down == NULL) {
+            return h;
         } else {
-            if (h->down) {
+            if (x >= h->key && (h->right == NULL || h->right->key > x)) {
                 h = h->down;
+#ifdef DEBUG
+                cout<<"d-";
+#endif
             } else {
-                if (x == h->key) {
-                    return h; 
+                if (x < h->key) {
+#ifdef DEBUG
+                    cout<<"return imediately"<<endl;
+#endif
+                    return NULL;
+                } else {
+                    h = h->right;
+#ifdef DEBUG
+                    cout<<"r-";
+#endif
                 }
-                h = h->right;
             }
         }
     }
+#ifdef DEBUG
+    cout<<endl;
+#endif
     return h;
 }
 
@@ -105,33 +117,42 @@ int insert_x_into_skip_list(skip_list * sl, int x)
         // insert x into single link list
         height[i] = insert_x_into_list(sl->header[i], x);
     }
-    for(int i = sl->max_level; i ; --i) {
+    for(int i = current_level; i ; --i) {
         height[i]->down = height[i-1];
+#ifdef DEBUG
+        cout<<"connect down "<<height[i]->key<<" "<<endl;
+#endif
     }
+    ++sl->size;
     return 0;
 }
 
 
 int remove_data_from_list(node *head, int x)
 {
-    node * prev = NULL, * true_head = head;
+    node * prev = NULL;
     while(head) {
         if (head->key == x) {
             if (prev) {
                 prev->right = head->right;
+                head->right = NULL;
+            } else {
+                head = head->right;
+                head->right = NULL;
             }
             delete head;
+            break;
         } else {
-            prev = head;
             head = head->right;
         }
+        prev = head;
     }
     return 0;
 }
 
 int remove_x_from_skip_list (skip_list * sl, int x)
 {
-    for(int i =0; i<=sl->max_level; ++i) {
+    for(int i =0; i<sl->max_level; ++i) {
         remove_data_from_list(sl->header[i], x);
     }
     return 0;
@@ -155,11 +176,19 @@ int main()
     skip_list * sl = skip_list_init();
     for(int i = 0; i< 15; i++) {
         insert_x_into_skip_list(sl, i);
-        print_list(sl);
     }
-    for(int i = 0; i< 10; i++) {
+    print_list(sl);
+    for(int i = -1; i< 20; i++) {
         node * p = find_x_from_skip_list(sl, i);
-        cout<<" find key "<<i<<endl;
+        if (p == NULL) {
+            cout<<"not found "<<i<<endl;
+        } else {
+            cout<<"find key "<<i<<endl;
+        }
+    }
+    for(int i = 0; i< 15; ++i) {
+        remove_x_from_skip_list(sl, i);
+        print_list(sl);
     }
     return 0;
 }
