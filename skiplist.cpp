@@ -131,28 +131,30 @@ int insert_x_into_skip_list(skip_list * sl, int x)
 int remove_data_from_list(node *head, int x)
 {
     node * prev = NULL;
-    while(head) {
-        if (head->key == x) {
+    node * cur = head;
+    while(cur) {
+        if (cur->key == x) {
             if (prev) {
-                prev->right = head->right;
-                head->right = NULL;
+                prev->right = cur->right;
+                delete cur;
+                cur = prev->right;
             } else {
-                head = head->right;
-                head->right = NULL;
+                prev = cur;
+                delete cur;
+                cur = prev->right;
+                prev = NULL;
             }
-            delete head;
-            break;
         } else {
-            head = head->right;
+            prev = cur;
+            cur = cur->right;
         }
-        prev = head;
     }
     return 0;
 }
 
 int remove_x_from_skip_list (skip_list * sl, int x)
 {
-    for(int i =0; i<sl->max_level; ++i) {
+    for(int i =0; i<=sl->max_level; ++i) {
         remove_data_from_list(sl->header[i], x);
     }
     return 0;
@@ -173,22 +175,25 @@ int print_list(skip_list *sl)
 
 int main()
 {
+    int test_n = 1000;
     skip_list * sl = skip_list_init();
-    for(int i = 0; i< 15; i++) {
+    for(int i = 0; i< test_n; i++) {
         insert_x_into_skip_list(sl, i);
     }
     print_list(sl);
-    for(int i = -1; i< 20; i++) {
-        node * p = find_x_from_skip_list(sl, i);
-        if (p == NULL) {
-            cout<<"not found "<<i<<endl;
-        } else {
-            cout<<"find key "<<i<<endl;
-        }
-    }
-    for(int i = 0; i< 15; ++i) {
-        remove_x_from_skip_list(sl, i);
-        print_list(sl);
-    }
+//    for(int i = -1; i< 20; i++) {
+//        node * p = find_x_from_skip_list(sl, i);
+//        if (p == NULL) {
+//            cout<<"not found "<<i<<endl;
+//        } else {
+//            cout<<"find key "<<i<<endl;
+//        }
+//    }
+//    for(int i = 0; i< test_n; ++i) {
+//        cout<<"going to remove " <<i<<endl;
+//        remove_x_from_skip_list(sl, i);
+//        print_list(sl);
+//        cout<<"after remove "<<i<<endl;
+//    }
     return 0;
 }
