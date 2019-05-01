@@ -1,4 +1,8 @@
 # Definition for singly-linked list.
+import pdb
+from heapq import heappush, heappop, heapreplace, heapify
+from common import CommonUtil
+
 class ListNode(object):
     def __init__(self, x):
         self.val = x
@@ -23,11 +27,6 @@ class Solution(object):
             l2.next = self.mergeTwoLists(l1, l2.next)
             return l2
 
-    def printList(self, head):
-        while head:
-            print head.val,
-            head = head.next
-
 def run():
     l1 = ListNode(1)
     l2 = ListNode(3)
@@ -35,7 +34,6 @@ def run():
     r2 = ListNode(4)
     l1.next = l2
     r1.next = r2
-
     s = Solution()
     res = s.mergeTwoLists(l1, r1)
-    s.printList(res)
+    CommonUtil.printList(res)
