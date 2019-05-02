@@ -16,6 +16,15 @@ class Solution(object):
             return ans
         else:
             return 1/ans
+
+    def myPow1(self, x, n):
+        if not n:
+            return 1
+        if n < 0:
+            return 1 / self.myPow1(x, -n)
+        if n % 2:
+            return x * self.myPow1(x, n -1)
+        return self.myPow1(x * x, n/2)
         
 def run():
     s = Solution()
