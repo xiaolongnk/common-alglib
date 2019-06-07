@@ -21,7 +21,7 @@ class Solution(object):
             t = divisor << 1
             if dividend >= t:
                 divisor = t
-                q += q
+                q = q << 1
             else:
                 rq += q
                 q = 1
